@@ -37,8 +37,7 @@ export const Merchant = () => {
   const [fullName, setFullName] = useState('');
   const [callback, setCallback] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [merchantTableList, setMerchantTableList] = useState([]);
-
+  const [merchantTableList, setMerchantTableList] = useState();
 
   const showDetails = (data) => {
     setIsSelected(true);
@@ -48,7 +47,6 @@ export const Merchant = () => {
   useEffect(() => {
     API.getMerchant(setMerchantList);
   }, [callback]);
-
 
   useEffect(() => {
     let temp = [];
@@ -71,14 +69,14 @@ export const Merchant = () => {
     setMerchantTableList(temp);
   }, [merchantList]);
 
-
-
   const refresh = () => {
     API.getMerchant(setMerchantList);
   };
+
   const handleDialogOpen = () => {
     setIsDialogOpen(true);
   };
+
   const handleSubmit = () => {
     //validation  
     let emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -101,55 +99,56 @@ export const Merchant = () => {
   };
   return (isSelected ? (<Redirect to={{ pathname: '/merchantdetail', state: { selectedMerchant } }} />
   ) : (
-    <Grid container className={classes.container} spacing={6}>
-      <Grid container className={classes.container} item xs={12}>
-        <Grid item xs={8}>
-          <Typography variant='h4'>Merchants</Typography>
+      <Grid container className={classes.container} spacing={6}>
+        <Grid container className={classes.container} item xs={12}>
+          <Grid item xs={8}>
+            <Typography variant='h4'>Merchants</Typography>
+          </Grid>
+          <Grid item xs={4} container justify="flex-end" alignItems="center">
+            <Button variant='outlined' onClick={handleDialogOpen}>Add</Button>
+          </Grid>
+          {merchantTableList === undefined ? <LoadingAnimation /> : <TableWithSorting
+            emptyString="No Merchants available."
+            headerElements={headCells}
+            data={merchantTableList}
+            ignoreKeys={['_id']}
+            tableTitle={'Merchant List'}
+            actionColor={'primary'}
+          />}
         </Grid>
-        <Grid item xs={4} container justify="flex-end" alignItems="center">
-          <Button variant='outlined' onClick={handleDialogOpen}>Add</Button>
-        </Grid>
-        {merchantTableList[0] === undefined ? <LoadingAnimation /> : <TableWithSorting
-          headerElements={headCells}
-          data={merchantTableList}
-          ignoreKeys={['_id']}
-          tableTitle={'Merchant List'}
-          actionColor={'primary'}
-        />}
-      </Grid>
-      <Dialog fullWidth maxWidth='md' open={isDialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>Create New Merchant</DialogTitle>
-        <DialogContent>
-          <form>
-            <TextField
-              label='Email'
-              fullWidth
-              margin='normal'
-              variant='outlined'
-              defaultValue={emailId}
-              onChange={(e) => setEmailId(e.target.value)}
-            />
-            <TextField
-              className={classes.margin}
-              label='Merchant Name'
-              fullWidth
-              margin='normal'
-              variant='outlined'
-              defaultValue={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-            />
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>
+        <Dialog fullWidth maxWidth='md' open={isDialogOpen} onClose={handleDialogClose}>
+          <DialogTitle>Create New Merchant</DialogTitle>
+          <DialogContent>
+            <form>
+              <TextField
+                label='Email'
+                fullWidth
+                margin='normal'
+                variant='outlined'
+                defaultValue={emailId}
+                onChange={(e) => setEmailId(e.target.value)}
+              />
+              <TextField
+                className={classes.margin}
+                label='Merchant Name'
+                fullWidth
+                margin='normal'
+                variant='outlined'
+                defaultValue={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
+            </form>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleDialogClose}>
               Cancel
           </Button>
-          <Button onClick={handleSubmit}>
+            <Button onClick={handleSubmit}>
               Submit
           </Button>
-        </DialogActions>
-      </Dialog>
-    </Grid>)
+          </DialogActions>
+        </Dialog>
+      </Grid>)
   );
 };
 export default withRouter(Merchant);

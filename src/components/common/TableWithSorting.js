@@ -143,14 +143,14 @@ function EnhancedTableHead(props) {
     <TableHead >
       <TableRow>
         {options !== undefined && (options.selector &&
-                    <TableCell padding='checkbox'>
-                      <Checkbox
-                        indeterminate={numSelected > 0 && numSelected < rowCount}
-                        checked={numSelected === rowCount}
-                        onChange={onSelectAllClick}
-                        inputProps={{ 'aria-label': 'select all plugs' }}
-                      />
-                    </TableCell>)}
+          <TableCell padding='checkbox'>
+            <Checkbox
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{ 'aria-label': 'select all plugs' }}
+            />
+          </TableCell>)}
         {headCells.map(headCell => (
           <TableCell
             key={headCell.id}
@@ -195,15 +195,15 @@ const useToolbarStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(1)
   },
   highlight:
-        theme.palette.type === 'light'
-          ? {
-            color: theme.palette.primary.main,
-            backgroundColor: lighten(theme.palette.primary.light, 0.85)
-          }
-          : {
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.primary.dark
-          },
+    theme.palette.type === 'light'
+      ? {
+        color: theme.palette.primary.main,
+        backgroundColor: lighten(theme.palette.primary.light, 0.85)
+      }
+      : {
+        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.primary.dark
+      },
   title: {
     flex: '1 1 100%'
   }
@@ -220,25 +220,33 @@ const EnhancedTableToolbar = props => {
   // }
   const handleActionType = () => {
     let content =
-            (options.toolbarActions.map((value, i) => {
-              return (value.actionType === 'delete' ? (<Grid item key={'toolbarAction' + i}><Tooltip title='Delete'>
-                <IconButton aria-label='delete' color='secondary' onClick={(e) => value.function(e, selectedIds)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
-              </Grid>) : (value.actionType === 'shout' ? (<Grid item key={'toolbarAction' + i}><Tooltip title='Shout'>
+      (options.toolbarActions.map((value, i) => {
+        return (value.actionType === 'delete' ? (<Grid item key={'toolbarAction' + i}><Tooltip title='Delete'>
+          <IconButton aria-label='delete' color='secondary' onClick={(e) => value.function(e, selectedIds)}>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+        </Grid>) :
+          (value.actionType === 'shout' ?
+            <Grid item key={'toolbarAction' + i}>
+              <Tooltip title='Shout'>
                 <IconButton aria-label='shout' color='primary' onClick={(e) => value.function(e, selectedIds)}>
                   <Send />
                 </IconButton>
               </Tooltip>
-              </Grid>) : (value.actionType === 'confirm' && (<Grid item key={'toolbarAction' + i}><Tooltip title={value.actionType} >
+            </Grid> :
+            (value.actionType === 'confirm' && (<Grid item key={'toolbarAction' + i}>
+              <Tooltip title={value.actionType} >
                 <IconButton aria-label={value.actionType} color='primary' onClick={(e) => value.function(e, selectedIds)}>
                   <DoneAll />
                 </IconButton>
-              </Tooltip></Grid>))));
-
-            })
-            );
+              </Tooltip>
+            </Grid>)
+            )
+          )
+        );
+      })
+      );
     return content;
   };
   const checkRole = () => {
@@ -253,21 +261,21 @@ const EnhancedTableToolbar = props => {
   };
   const handleEditAction = () => {
     let content =
-            (options.toolbarActions.map((value, i) => {
-              return (value.actionType === 'promote' ? (!checkRole() && <Grid item key={'toolbarAction' + i}><Tooltip title={value.actionType} >
-                <IconButton aria-label={value.actionType} color='primary' onClick={(e) => value.function(e, selectedIds)}>
-                  <ArrowUpwardIcon />
-                </IconButton>
-              </Tooltip></Grid>) : (value.actionType === 'demote' ? (checkRole() && <Grid item key={'toolbarAction' + i}><Tooltip title={value.actionType} >
-                <IconButton aria-label={value.actionType} color='primary' onClick={(e) => value.function(e, selectedIds)}>
-                  <ArrowDownwardIcon />
-                </IconButton>
-              </Tooltip></Grid>) : (value.actionType === 'edit' && (<Grid item key={'toolbarAction' + i}><Tooltip title={value.actionType} >
-                <IconButton aria-label={value.actionType} color='primary' onClick={(e) => value.function(e, selectedIds)}>
-                  <Edit />
-                </IconButton>
-              </Tooltip></Grid>))));
-            }));
+      (options.toolbarActions.map((value, i) => {
+        return (value.actionType === 'promote' ? (!checkRole() && <Grid item key={'toolbarAction' + i}><Tooltip title={value.actionType} >
+          <IconButton aria-label={value.actionType} color='primary' onClick={(e) => value.function(e, selectedIds)}>
+            <ArrowUpwardIcon />
+          </IconButton>
+        </Tooltip></Grid>) : (value.actionType === 'demote' ? (checkRole() && <Grid item key={'toolbarAction' + i}><Tooltip title={value.actionType} >
+          <IconButton aria-label={value.actionType} color='primary' onClick={(e) => value.function(e, selectedIds)}>
+            <ArrowDownwardIcon />
+          </IconButton>
+        </Tooltip></Grid>) : (value.actionType === 'edit' && (<Grid item key={'toolbarAction' + i}><Tooltip title={value.actionType} >
+          <IconButton aria-label={value.actionType} color='primary' onClick={(e) => value.function(e, selectedIds)}>
+            <Edit />
+          </IconButton>
+        </Tooltip></Grid>))));
+      }));
     return content;
   };
 
@@ -282,24 +290,24 @@ const EnhancedTableToolbar = props => {
           {numSelected} selected
         </Typography>
       ) : (
-        <Grid container spacing={1} direction='row'>
-          <Grid item className={classes.title} xs={9}>
-            <Typography variant='h5' id='tableTitle'>
-              {tableTitle}
-            </Typography>
+          <Grid container spacing={1} direction='row'>
+            <Grid item className={classes.title} xs={9}>
+              <Typography variant='h5' id='tableTitle'>
+                {tableTitle}
+              </Typography>
+            </Grid>
+            <Grid container item justify='flex-end' alignItems='flex-end' xs={3}>
+              {options !== undefined && options.toolbarActions.map((value, i) => {
+                return (value.actionType === 'add' && (<Grid item key={'toolbarAction' + i}><Tooltip title='Add' >
+                  <IconButton aria-label='add' color='primary' onClick={(e) => value.function(e, selectedIds)}>
+                    <PersonAdd />
+                  </IconButton>
+                </Tooltip></Grid>
+                ));
+              })}
+            </Grid>
           </Grid>
-          <Grid container item justify='flex-end' alignItems='flex-end' xs={3}>
-            {options !== undefined && options.toolbarActions.map((value, i) => {
-              return (value.actionType === 'add' && (<Grid item key={'toolbarAction' + i}><Tooltip title='Add' >
-                <IconButton aria-label='add' color='primary' onClick={(e) => value.function(e, selectedIds)}>
-                  <PersonAdd />
-                </IconButton>
-              </Tooltip></Grid>
-              ));
-            })}
-          </Grid>
-        </Grid>
-      )}
+        )}
 
       {numSelected > 0 ? (
         <Grid container spacing={1} direction='row' justify='flex-end' alignItems='flex-end'>
@@ -307,8 +315,8 @@ const EnhancedTableToolbar = props => {
           {handleActionType()}
         </Grid>
       ) : (
-        null
-      )}
+          null
+        )}
     </Toolbar>
   );
 };
@@ -428,7 +436,16 @@ export const TableWithSorting = (props) => {
               options={options}
             />
             <TableBody>
-              {stableSort(data, getSorting(order, orderBy))
+
+              {data.length === 0 && props.emptyString !== undefined ? <TableRow style={{ height: 53 * emptyRows }}>
+                <TableCell colSpan={colSpanEmpty + 1} >
+                  <Typography style={{ margin: "0 auto", textAlign: "center" }}>
+                    {
+                      props.emptyString
+                    }
+                  </Typography>
+                </TableCell>
+              </TableRow> : stableSort(data, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row._id);
@@ -449,12 +466,12 @@ export const TableWithSorting = (props) => {
                           onClick={event => handleClick(event, row._id)}
                         />
                       </TableCell> : <TableCell padding='checkbox'>
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ 'aria-label': labelId }}
-                          onClick={event => handleClick(event, row._id)}
-                        />
-                      </TableCell>)
+                          <Checkbox
+                            checked={isItemSelected}
+                            inputProps={{ 'aria-label': labelId }}
+                            onClick={event => handleClick(event, row._id)}
+                          />
+                        </TableCell>)
                       )}
 
                       {Object.keys(row).map((value, index) => {
@@ -465,12 +482,12 @@ export const TableWithSorting = (props) => {
                           className={classes.specialRow}
                         >{(Array.isArray(row[value]) ? row.join(', ') : row[value])}
                         </TableCell>) : (
-                          <TableCell
-                            align={textAlign === undefined ? 'left' : textAlign}
-                            scope='row'
-                            key={index}
-                          >{(Array.isArray(row[value]) ? row.join(', ') : row[value])}
-                          </TableCell>)
+                            <TableCell
+                              align={textAlign === undefined ? 'left' : textAlign}
+                              scope='row'
+                              key={index}
+                            >{(Array.isArray(row[value]) ? row.join(', ') : row[value])}
+                            </TableCell>)
                         );
                       })}
 
@@ -480,8 +497,8 @@ export const TableWithSorting = (props) => {
                           <Button
                             variant='contained'
                             color={props.actionColor === undefined ||
-                                                            props.actionColor === null ||
-                                                            (props.actionColor !== 'primary' && props.actionColor !== 'secondary') ?
+                              props.actionColor === null ||
+                              (props.actionColor !== 'primary' && props.actionColor !== 'secondary') ?
                               'primary' : actionColor
                             }
                             className={classes.buttons}
@@ -494,7 +511,7 @@ export const TableWithSorting = (props) => {
                     </TableRow>
                   );
                 })}
-              {emptyRows > 0 && (
+              {emptyRows > 0 && data.length > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
                   <TableCell colSpan={colSpanEmpty + 1} />
                 </TableRow>
@@ -524,8 +541,9 @@ export const TableWithSorting = (props) => {
 
 TableWithSorting.propTypes = {
   headerElements: PropTypes.arrayOf(PropTypes.object).isRequired,
-  tableTitle: PropTypes.string,
+  emptyString: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tableTitle: PropTypes.string,
   action: PropTypes.arrayOf(PropTypes.object),
   actionName: PropTypes.string,
   actionColor: PropTypes.string,
