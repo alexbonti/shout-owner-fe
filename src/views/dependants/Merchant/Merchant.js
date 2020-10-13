@@ -33,7 +33,7 @@ export const Merchant = () => {
   ];
 
   const classes = useStyles();
-  const [merchantList, setMerchantList] = useState([]);
+  const [merchantList, setMerchantList] = useState();
   const [selectedMerchant, setSelectedMerchant] = useState('');
   const [isSelected, setIsSelected] = useState(false);
   const [emailId, setEmailId] = useState('');
@@ -106,78 +106,79 @@ export const Merchant = () => {
   };
   return (isSelected ? (<Redirect to={{ pathname: '/merchantdetail', state: { selectedMerchant } }} />
   ) : (
-    <Grid container justify="center" className={isItDesktop ? '' : classes.mobileContainer}>
-      <Grid container item xs={isItDesktop ? 10 : 12} className={classes.container}>
-        <Grid container item xs={12}>
-          <Grid item xs={8}>
-            <Typography variant='h4'>Merchants</Typography>
+      <Grid container justify="center" className={isItDesktop ? '' : classes.mobileContainer}>
+        <Grid container item xs={isItDesktop ? 10 : 12} className={classes.container}>
+          <Grid container item xs={12}>
+            <Grid item xs={8}>
+              <Typography variant='h4'>Merchants</Typography>
+            </Grid>
+            <Grid item xs={4} container justify="flex-end" alignItems="center">
+              <Button variant='outlined' onClick={handleDialogOpen}>Add</Button>
+            </Grid>
+            {merchantTableList !== undefined ? <TableWithSorting
+              headerElements={headCells}
+              emptyString="No Merchants available."
+              data={merchantTableList}
+              ignoreKeys={['_id']}
+              tableTitle={'Merchant List'}
+              actionColor={'primary'}
+            /> : <LoadingAnimation />}
           </Grid>
-          <Grid item xs={4} container justify="flex-end" alignItems="center">
-            <Button variant='outlined' onClick={handleDialogOpen}>Add</Button>
-          </Grid>
-          {merchantTableList !== undefined && merchantTableList && merchantTableList !== null ? <TableWithSorting
-            headerElements={headCells}
-            data={merchantTableList}
-            ignoreKeys={['_id']}
-            tableTitle={'Merchant List'}
-            actionColor={'primary'}
-          /> : <LoadingAnimation />}
-        </Grid>
-        <Dialog fullWidth maxWidth='md' open={isDialogOpen} onClose={handleDialogClose}>
-          <DialogTitle>Create New Merchant</DialogTitle>
-          <DialogContent>
-            <form>
-              <TextField
-                label='Email'
-                fullWidth
-                margin='normal'
-                variant='outlined'
-                defaultValue={emailId}
-                onChange={(e) => setEmailId(e.target.value)}
-              />
-              <TextField
-                className={classes.margin}
-                label='Merchant Name'
-                fullWidth
-                margin='normal'
-                variant='outlined'
-                defaultValue={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-              />
-            </form>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleDialogClose}>
+          <Dialog fullWidth maxWidth='md' open={isDialogOpen} onClose={handleDialogClose}>
+            <DialogTitle>Create New Merchant</DialogTitle>
+            <DialogContent>
+              <form>
+                <TextField
+                  label='Email'
+                  fullWidth
+                  margin='normal'
+                  variant='outlined'
+                  defaultValue={emailId}
+                  onChange={(e) => setEmailId(e.target.value)}
+                />
+                <TextField
+                  className={classes.margin}
+                  label='Merchant Name'
+                  fullWidth
+                  margin='normal'
+                  variant='outlined'
+                  defaultValue={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+              </form>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleDialogClose}>
                 Cancel
             </Button>
-            <Button onClick={handleSubmit}>
+              <Button onClick={handleSubmit}>
                 Submit
             </Button>
-          </DialogActions>
-        </Dialog>
-      </Grid>
-      <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        open={loading.state}
-        color='primary'
-        onClose={() => setLoading({ state: false, message: '' })}
-        message={loading.message}
-        autoHideDuration={2000}
-        key={'bottom-right'}
-        action={
-          <React.Fragment>
-            <IconButton
-              aria-label="close"
-              color="secondary"
-              className={classes.close}
-              onClick={() => setLoading({ state: false, message: '' })}
-            >
-              <CloseIcon />
-            </IconButton>
-          </React.Fragment>
-        }
-      />
-    </Grid>)
+            </DialogActions>
+          </Dialog>
+        </Grid>
+        <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          open={loading.state}
+          color='primary'
+          onClose={() => setLoading({ state: false, message: '' })}
+          message={loading.message}
+          autoHideDuration={2000}
+          key={'bottom-right'}
+          action={
+            <React.Fragment>
+              <IconButton
+                aria-label="close"
+                color="secondary"
+                className={classes.close}
+                onClick={() => setLoading({ state: false, message: '' })}
+              >
+                <CloseIcon />
+              </IconButton>
+            </React.Fragment>
+          }
+        />
+      </Grid>)
   );
 };
 export default withRouter(Merchant);
